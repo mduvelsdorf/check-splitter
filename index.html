@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+	<meta charset="UTF-8">
+	<title>Tip Calculator and Check Splitter</title>
+   
+	<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.2/css/bootstrap.css'>
+	<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'></script>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+  </script>
+
+	<link rel="stylesheet" href="css/style.css">
+	<script  src="js/index.js"></script>
+  
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+<!--Header-->  
+  
+<div id="header">
+  <div class="row">
+    <div class="col-xs-7">
+      Tip Calculator and Check Splitter
+    </div>
+    <div class="col-xs-5" style="text-align:right">
+      Created by Melissa Duvelsdorf
+    </div>
+  </div>
+</div>
+  
+<!--Containers for headers and receiving input for subtotal, total, and tip percentage-->  
+
+<div id="section1">  
+  <div class="row">
+    <div class="col-xs-4">
+      <a href="#" data-toggle="tooltip" title="Tip is typically calculated on a check's subtotal. The subtotal is the sum of your bill's items, not including tax. This can be found on your receipt.">Subtotal*</a>
+    </div>
+    <div class="col-xs-4">
+      <a href="#" data-toggle="tooltip" title="People typically tip between 15 and 20 percent. For large parties, tip may already be included at 18 percent.">Tip Percent*</a>
+    </div>
+    <div class="col-xs-4">
+      <a href="#" data-toggle="tooltip" title="Your bill's total will include all items purchased and sales tax. This can be found on your receipt. Your total must be greater than your Subtotal.">Total*</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-4">
+      <input type="number" id="subtotal">
+    </div>
+    <div class="col-xs-4">
+      <input type="number" id="percent">
+    </div>
+    <div class="col-xs-4">
+      <input type="number" id="total">
+    </div>
+  </div>
+</div> 
+    
+<!--Warning if more information is needed, or values are negative-->
+    
+<div class="row">
+  <div class="col-xs-12" id="missingValues">
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12" id="fixSubtotal">
+  </div>
+</div>
+ 
+<!--Buttons for calculating tip, splitting check evenly, and splitting check by item--> 
+    
+<div class="btn-group btn-group-justified">
+  <div class="btn-group">
+    <button type="button" class="btn button1" id="calculate" onclick=calculateBasic()>
+      Calculate
+    </button>
+  </div>
+  <div class="btn-group">
+    <button type="button" class="btn button1" onclick=displayGuests()>
+      Split Evenly
+    </button>
+  </div>
+  <div class="btn-group">
+    <button type="button" class="btn button1" onclick=displayItems()>
+      Split by Item 
+    </button>
+  </div>
+</div>
+
+<div id="section2">  
+  
+<!--Input for additional information for splitting the check evenly-->    
+
+  <div class="row" id="getGuests">
+    <div class="col-xs-3">
+    </div>
+    <div class="col-xs-6" color="black">
+      Number of Guests: 
+      <input type="number" id="guests">
+      <button type="button" class="button2" onclick=calculateEven()>Split</button>
+    </div>
+    <div class="col-xs-3">
+    </div>
+  </div>
+
+<!--Input for additional information for splitting the check by item-->
+
+  <div class="row" id="getItems">
+    <div class="col-xs-3">
+    </div>
+    <div class="col-xs-6">
+      Number of Guests: 
+      <input type="number" id="guestsByItem">
+      <button type="button" class="button2" onclick=createGuests()>Start Adding Items</button>
+    </div>
+    <div class="col-xs-3">
+    </div>
+  </div>
+
+<!--Warning if there are too many guests, limit 10-->  
+  
+<div class="row">
+  <div class="col-xs-12" id="excessiveGuests">
+  </div>
+</div>
+    
+<!--Row headers for split by item-->    
+
+  <div id="splitHide">       
+    <div class="row">
+      <div class="col-xs-4">
+        Item Purchased
+      </div>
+      <div class="col-xs-4">
+        Price of Item
+      </div>
+      <div class="col-xs-4">
+        Select Guest
+      </div>
+    </div>
+  
+<!--Rows to input items, can be added or removed --> 
+  
+    <div id="itemInput">
+      <div class="row">
+        <div class="col-xs-4">
+          <input name="description" type="text">
+        </div>
+       <div class="col-xs-4">
+          <input name="price" type="number">
+       </div>
+       <div class="col-xs-4">
+          <select name="guestId" id="guestDropdown">
+          </select>
+      </div> 
+     </div><br>
+    </div>
+  
+<!--Buttons for calculating split, adding new items, and removing the last item-->
+  
+    <div class="btn-group btn-group-justified">
+      <div class="btn-group">
+        <button type="button" class="btn button1" onclick=calculateItemSplit()>
+          Calculate Split
+        </button>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn button1" onclick=addNewItem()>
+          Add New Item
+        </button>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn button1" onclick=removeItem()>
+          Remove Last Item
+        </button>
+      </div>
+    </div>
+    
+  </div>
+
+<!--Warning if prices do not add up to subtotal-->   
+
+<div class="row">
+  <div class="col-xs-12" id="unequal">
+  </div>
+</div>    
+    
+<!--Inner HTML output from JS calculations-->
+
+<div id="section3">
+  <div class="row" id="hide">
+    <div class="col-xs-6" id="tip">
+    </div>
+    <div class="col-xs-6" id="pay">
+    </div>
+  </div> 
+  <div class="row">
+    <div class="col-xs-4">
+      <div id="piechart">
+      </div>
+    </div>
+    <div class="col-xs-4" id="perPerson">
+    </div>
+    <div class="col-xs-4">
+      <div id="requestMoney">
+        Request Money<br><br>
+        <a href="https://www.paypal.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Paypal_2014_logo.png" alt="PayPal" id="logo"></img></a>
+        <a href="https://www.venmo.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Venmo_Logo.svg/2000px-Venmo_Logo.svg.png" alt="Venmo" id="logo"></img></a>
+        <a href="https://www.google.com/wallet" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Google_Wallet_logo.svg/2000px-Google_Wallet_logo.svg.png" alt="Google Wallet" id="logo"></img></a>
+      </div>
+    </div>
+  </div>
+</div> 
+   
+</div>
+ 
+</body>
+
+</html>

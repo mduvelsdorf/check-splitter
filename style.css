@@ -1,0 +1,56 @@
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+#section1, #section2 {
+  background-color: #dedeed;
+}
+
+#header, #section3 {
+  background-color: #acacd2;
+}
+
+.button1 {
+  background-color: #73738c;
+  color: white;
+}
+
+.button2 {
+  background-color: #9c9cc9;
+  color: white;
+}
+
+#missingValues, #fixSubtotal, #unequal, #excessiveGuests {
+  text-align: center;
+  color: red;
+}
+
+.col-xs-4, .col-xs-6 {
+  text-align: center;
+  margin: auto;
+}
+
+#header, #pay, #tip, #perPerson {
+  font-size: 125%;
+  color: #3e3e74;
+}
+
+#hide, #perPerson, #getGuests, #getItems, #splitHide, #requestMoney {
+  display: none;
+}
+
+#piechart {
+  width: 100%;
+  display: block;
+  align-content: center;
+  margin: auto;
+}
+
+#requestMoney {
+  font-size: 125%;
+}
+
+#logo {
+  width: 20%;
+  padding: 2px;
+}
